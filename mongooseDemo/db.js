@@ -10,9 +10,9 @@ db.once('open', function() {
   console.log('db ok');
 });
 
-// scheme 对象操作数据库
+// schema 对象操作数据库
 
-// 创建一个和集合相关的 scheme 对象
+// 创建一个和集合相关的 schema 对象
 const userSchema = mongoose.Schema({
     us: {type: String, required: true},
     ps: {type: String, required: true},
@@ -20,8 +20,8 @@ const userSchema = mongoose.Schema({
     sex: {type: Number, default: 0}
 })
 
-// 将 scheme 对象转化为数据模型
-const User = mongoose.model('users', userSchema);    //该数据对象和集合关联('集合名/表名'，scheme 对象)
+// 将 schema 对象转化为数据模型
+const User = mongoose.model('users', userSchema);    //该数据对象和集合关联('集合名/表名'，schema 对象)
 
 // 操作数据库
 
