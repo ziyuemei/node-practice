@@ -1,0 +1,19 @@
+1.初始化项目：npm init -y
+2.安装express：npm i express
+    安装解析 post 请求体内容的第三方插件：npm install body-parser
+3.模块(第三方)引用：const express = require('express');
+4.代码改写
+
+5.自己电脑上本地启的服务，api 接口：http://localhost:3000/user/login
+[3000是 server.js 里面监听的端口号，/user/login 是 server.js 里面 api 路径] [192.168.1.105  localhost 127.0.0.1]
+api 接口构成要素：协议 + ip + 端口号 + pathname + 方法(get/post) + 参数
+
+6.服务器：
+    a.服务器就是一台电脑
+    b.服务器软件(apach tomact iis ngnix node)
+    c.服务器 ip 和 端口号(默认端口号：80)
+
+7.post 传参需要注意数据格式：
+    json: {"a":"1","b":"2"}
+    x-www-form-urlencode: a=1&b=2
+    formdata:
