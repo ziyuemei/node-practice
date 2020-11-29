@@ -1,0 +1,6 @@
+1.初始化项目：npm init -y
+2.安装express及解析消息体插件：npm i express body-parser
+3.引入插件并使用：
+4改写代码
+
+5.中间件全局拦截器：检查每个请求是否都携带了 token
