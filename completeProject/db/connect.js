@@ -5,5 +5,5 @@ mongoose.connect('mongodb://localhost/completeProject', { useNewUrlParser: true,
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log('成功接数据库')
+  console.log('成数据库连接成功')
 });
