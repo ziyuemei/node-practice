@@ -3,3 +3,18 @@
 3.新建 server.js 启动服务
 4.新建 db 文件夹 > connect.js 连接数据库 > model 文件夹 > Schema 对象，每个Schema对象代表数据库中的一张表
 5.新建 router 文件夹 > 路由文件，每个模块对应一个 js 文件
+
+6.功能：
+    注册
+    登录
+    添加
+    查询
+    分页
+    删除
+    修改
+
+7.文件上传
+    npm install multer
+
+8.更新 api 文档
+    apidoc -i ./router -o ./apidoc
