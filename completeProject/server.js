@@ -5,7 +5,10 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const path = require('path')
-app.use('/public', express.static(path.join(__dirname,'./apidoc')))
+const request = require('request')
+    // const cors = require('cors')
+    // app.use(cors())
+app.use('/public', express.static(path.join(__dirname, './apidoc')))
 
 // 引入路由
 const userRouter = require('./router/userRouter')
@@ -16,7 +19,15 @@ const fileRouter = require('./router/fileRouter')
 app.use('/user', userRouter)
 app.use('/food', foodRouter)
 app.use('/file', fileRouter)
+app.get('/tengxun', (req, res) => {
+    request('https://v.qq.com/x/cover/mzc002000w08m6u.html', (err, response, body) => {
+        if (!err) {
+            console.log(body)
+            res.send(body)
+        }
+    })
+})
 
-app.listen(3000, ()=>{
+app.listen(3000, () => {
     console.log('服务启动成功')
 })
