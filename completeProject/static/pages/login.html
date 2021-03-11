@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        html {
+            height: 100%;
+            background-image: url(../images/login_bg.jpg);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .wrap {
+            width: 300px;
+            min-height: 300px;
+            text-align: center;
+        }
+        
+        h1 {
+            padding-bottom: 10px;
+        }
+        
+        .wrap>div {
+            height: 240px;
+        }
+        
+        .wrap>div>div {
+            height: 60px;
+        }
+        
+        .wrap>div>div>span {
+            display: inline-block;
+            width: 80px;
+        }
+        
+        .wrap>div:nth-of-type(3)>span {
+            display: inline-block;
+            vertical-align: super;
+        }
+        
+        input {
+            outline: none;
+            height: 25px;
+        }
+        
+        .sex {
+            display: inline-block;
+            width: 165px;
+            text-align: left;
+        }
+        
+        .sex>input {
+            margin-right: 8px;
+        }
+        
+        .sex>input:nth-of-type(2) {
+            margin-left: 20px;
+        }
+        
+        .sex>span {
+            vertical-align: super;
+        }
+        
+        button {
+            width: 100px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        
+        button:nth-of-type(1) {
+            margin-left: 40px;
+        }
+        
+        .reg,
+        .log_titles {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1 class="log_title">登录已有账号</h1>
+        <h1 class="reg">注册新账号</h1>
+        <div>
+            <div>
+                <span>用户名：</span>
+                <input type="text" class="name"></input>
+            </div>
+            <div>
+                <span>密码：</span>
+                <input type="password" class="psw"></input>
+            </div>
+            <div class="reg">
+                <span>性别：</span>
+                <div class="sex">
+                    <input type="radio" name="gender" value="1" /><span>男</span>
+                    <input type="radio" name="gender" value="2" /><span>女</span>
+                </div>
+            </div>
+            <div class="reg">
+                <span>年龄：</span>
+                <input type="text" class="age"></input>
+            </div>
+        </div>
+        <button class="login"><span class="log_titles">去</span>登录</button>
+        <button class="register"><span class="regs">去</span>注册</button>
+    </div>
+    <script>
+        // 注册
+        $('.register').click(function() {
+            if ($('.regs').css('display') === 'none') {
+                // 注册新号
+                register();
+            } else {
+                // 展示注册页面
+                showReg();
+            }
+        });
+        // 登录
+        $('.login').click(function() {
+            if ($('.log_titles').css('display') === 'none') {
+                // 登录请求
+                login();
+            } else {
+                // 展示登录页面
+                showLog();
+            }
+        })
+
+        // 注册请求
+        function register() {
+            $.ajax({
+                url: 'http://127.0.0.1:3000/user/register',
+                type: 'post',
+                data: {
+                    us: $('.name').val(),
+                    ps: $('.psw').val(),
+                    sex: $('input:radio:checked').val(),
+                    age: $('.age').val()
+                },
+                success: (data) => {
+                    if (data.code === 0) {
+                        // 展示登录页面
+                        showLog();
+                    } else {
+                        alert(data.msg)
+                    }
+                }
+            })
+        }
+        // 登录请求
+        function login() {
+            $.ajax({
+                url: 'http://127.0.0.1:3000/user/login',
+                type: 'post',
+                data: {
+                    us: $('.name').val(),
+                    ps: $('.psw').val(),
+                },
+                success: (data) => {
+                    if (data.code === 0) {
+                        // 跳转到首页页面
+                        // showLog();
+                        alert(data.msg)
+                    } else {
+                        alert(data.msg)
+                    }
+                }
+            })
+        }
+        // 注册页面展示
+        function showReg() {
+            $('.name').val('')
+            $('.psw').val('')
+            $('.input:radio:checked').val('')
+            $('.age').val('')
+            $('.log_title').css('display', 'none')
+            $('.regs').css('display', 'none')
+            $('.reg').css('display', 'block')
+            $('.log_titles').css('display', 'inline-block')
+        }
+        // 登录页面展示
+        function showLog() {
+            $('.psw').val('')
+            $('.reg').css('display', 'none')
+            $('.log_titles').css('display', 'none')
+            $('.log_title').css('display', 'block')
+            $('.regs').css('display', 'inline-block')
+        }
+    </script>
+</body>
+
+</html>

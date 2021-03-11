@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>方法一</h1>
+    <!-- 前端上传图片：方法一，用form标签上传，缺点导致页面刷新 -->
+    <form action="http://127.0.0.1:3000/file/uploads" method="POST" enctype="multipart/form-data">
+        <input type="file" name="avatars" id="">
+        <input type="submit" value="提交">
+    </form>
+    <hr>
+    <h1>方法二</h1>
+    <!-- 前端上传图片：方法二，用formdata上传 -->
+    <input type="file" name="" id="file">
+    <button onclick="submit()">提交</button>
+    <img src="" alt="" class="img">
+
+    <script>
+        function submit() {
+            let file = $('#file').get(0).files[0];
+            // console.log(file)
+            let formData = new FormData(); // 创建一个空的formdata对象
+            formData.append('avatars', file); // avatars 为接口对应的Key值，必须保持一致，
+            // ajax上传接口
+            $.ajax({
+                url: 'http://127.0.0.1:3000/file/uploads',
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: (data) => {
+                    console.log(data)
+                    if (data.code === 0) {
+                        $('.img').attr('src', 'http://127.0.0.1:3000' + data.data)
+                    } else {
+                        alert('上传失败请重试！')
+                    }
+                }
+            })
+        }
+
+
+
+        // method();
+        // 原生ajax请求：
+        function method() {
+            var xhr = new XMLHttpRequest(); //创建异步对象,这里的()别忘记了
+            // xhr.open("post", "xxx.php"); //设置请求行：请求的方式(post/get)，请求的url   (get:会在网址栏中出现结果，易于测试但安全性不高。post无这种问题)
+            xhr.open("get", "http://127.0.0.1:3000/food/getInfoByKeyWord?keyWord='菜'");
+            // xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); //请求头，在post请求方式中必须有并且特定这种写法
+            xhr.onreadystatechange = function() { //回调函数，还有一种onload写法 //xhr.onload=function(){}
+                if (this.readyState == 4 && this.status == 200) { //状态等于4时响应完成，但页面404时仍可接收到响应，所以这里要status(页面状态)==200，既页面正常才给接收响应
+                    console.log(this.readyState); //值是4
+                    console.log(this.responseText);
+                }
+            };
+            xhr.send();
+            // xhr.send("name=heihei&skill=haha&age=15&sex=man");
+            //(请求主体)发送请求，post请求方式的请求信息写在请求主体里，就是这里(这里已经写了)
+            //get请求方式的请求信息写在请求行里，如 xhr.open("get","xxx.php?name=heihei&skill=haha&age=15&sex=man")```
+        }
+    </script>
+</body>
+
+</html>
