@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../db/model/userModel')
 const Mail = require('../utils/mails')
 const Random = require('../utils/random')
+const JWT = require('../utils/jwt')
 
 // 用户注册接口
 /**
@@ -69,7 +70,8 @@ router.post('/login', (req, res) => {
     User.find({ us, ps })
         .then((data) => {
             if (data.length > 0) {
-                return res.send({ code: 0, msg: '登录成功' })
+                let token = JWT.creatToken({ login: true, name: us })
+                return res.send({ code: 0, msg: '登录成功', token })
             } else {
                 return res.send({ code: -2, msg: '用户名或密码错误' })
             }

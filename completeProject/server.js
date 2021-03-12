@@ -6,10 +6,22 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const path = require('path')
 const request = require('request')
+const cookieParse = require('cookie-parser')
+const session = require('express-session')
     // const cors = require('cors')
     // app.use(cors())
 app.use('/api', express.static(path.join(__dirname, './apidoc')))
 app.use('/public', express.static(path.join(__dirname, './static')))
+
+
+//  session 整体配置
+// app.use(session({
+//     secret: 'abcd', // 设置私钥
+//     cookie: { maxAge: 1000 * 10 }, // 设置过期时间
+//     resave: true,
+//     saveUninitialized: false
+// }))
+
 
 // 引入路由
 const userRouter = require('./router/userRouter')

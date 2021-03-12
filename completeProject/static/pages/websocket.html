@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+
+<body>
+    <h3>websocket练习</h3>
+    <button onclick="sendMsg('好吧')">发送信息</button>
+    <button onclick="back()">返回登录页面</button>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8080/')
+        ws.onopen = () => {
+            console.log('服务器已连接')
+        }
+        ws.onmessage = (msg) => {
+            console.log('来着服务器端的数据：' + msg.data)
+        }
+        ws.onclose = () => {
+            console.log('服务端主动断开')
+        }
+        var count = 0
+
+        function sendMsg(msg) {
+            ws.send('前端发给后端的信息：' + msg)
+                // setInterval(() => {
+                //     sendMsg(++count)
+                // }, 500)
+        }
+
+        function back() {
+            window.location.href = './login.html'
+        }
+    </script>
+</body>
+
+</html>

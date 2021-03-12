@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const FoodModel = require('../db/model/foodModel')
+const JWT = require('../utils/jwt')
 
 // 添加食物接口
 /**
@@ -19,15 +20,15 @@ const FoodModel = require('../db/model/foodModel')
  * @apiSuccess {String} msg 状态信息文字描述.
  */
 router.post('/add', (req, res) => {
-    let {name, price, desc, typeName, typeId, img} = req.body
-    FoodModel.insertMany({name, price, desc, typeName, typeId, img})
-    .then((data) => {
-        res.send({code: 0, msg: '添加成功'})
-    })
-    .catch((err) => {
-        console.log(err, 'err,')
-        res.send({code: -1, msg: '添加失败'})
-    })
+    let { name, price, desc, typeName, typeId, img } = req.body
+    FoodModel.insertMany({ name, price, desc, typeName, typeId, img })
+        .then((data) => {
+            res.send({ code: 0, msg: '添加成功' })
+        })
+        .catch((err) => {
+            console.log(err, 'err,')
+            res.send({ code: -1, msg: '添加失败' })
+        })
 })
 
 // 分类查询食物接口
@@ -43,14 +44,14 @@ router.post('/add', (req, res) => {
  * @apiSuccess {Object} data 数据列表.
  */
 router.get('/getInfoByType', (req, res) => {
-    let {typeId} = req.query
-    FoodModel.find({typeId})
-    .then((data) => {
-        res.send({code: 0, msg: '查询成功', data})
-    })
-    .catch(() => {
-        res.send({code: -1, msg: '查询失败'})
-    })
+    let { typeId } = req.query
+    FoodModel.find({ typeId })
+        .then((data) => {
+            res.send({ code: 0, msg: '查询成功', data })
+        })
+        .catch(() => {
+            res.send({ code: -1, msg: '查询失败' })
+        })
 })
 
 // 模糊查询食物接口
@@ -66,16 +67,16 @@ router.get('/getInfoByType', (req, res) => {
  * @apiSuccess {Object} data 数据列表.
  */
 router.get('/getInfoByKeyWord', (req, res) => {
-    let {keyWord} = req.query
+    let { keyWord } = req.query
     let reg = new RegExp(keyWord) // 匹配关键字
-    // FoodModel.find({name: {$regex: reg}})  // 名字模糊
-    FoodModel.find({$or: [{name: {$regex: reg}}, {desc: {$regex: reg}}]}) // 名字或者描述模糊
-    .then((data) => {
-        res.send({code: 0, msg: '查询成功', data})
-    })
-    .catch(() => {
-        res.send({code: -1, msg: '查询失败'})
-    })
+        // FoodModel.find({name: {$regex: reg}})  // 名字模糊
+    FoodModel.find({ $or: [{ name: { $regex: reg } }, { desc: { $regex: reg } }] }) // 名字或者描述模糊
+        .then((data) => {
+            res.send({ code: 0, msg: '查询成功', data })
+        })
+        .catch(() => {
+            res.send({ code: -1, msg: '查询失败' })
+        })
 })
 
 // 删除菜品
@@ -90,15 +91,22 @@ router.get('/getInfoByKeyWord', (req, res) => {
  * @apiSuccess {String} msg 状态信息文字描述.
  */
 router.post('/delete', (req, res) => {
-    let {_id} = req.body
-    FoodModel.remove({_id}) // 删除一个
-    // FoodModel.remove({_id: [...ids.split(",")]}) // 批量删除
-    .then((data) => {
-        res.send({code: 0, msg: '删除成功'})
-    })
-    .catch(() => {
-        res.send({code: -1, msg: '删除失败'})
-    })
+    let { _id, token } = req.body
+    JWT.checkToken(token)
+        .then(data => {
+            FoodModel.deleteOne({ _id }) // 删除一个
+                // FoodModel.deleteMany({_id: [...ids.split(",")]}) // 批量删除
+                .then((data) => {
+                    res.send({ code: 0, msg: '删除成功' })
+                })
+                .catch(() => {
+                    res.send({ code: -1, msg: '删除失败' })
+                })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send(err)
+        })
 })
 
 // 修改食物接口
@@ -118,14 +126,14 @@ router.post('/delete', (req, res) => {
  * @apiSuccess {String} msg 状态信息文字描述.
  */
 router.post('/updata', (req, res) => {
-    let {name, price, desc, typeName, typeId, img, _id} = req.body
-    FoodModel.update({_id}, {name, price, desc, typeName, typeId, img})
-    .then((data) => {
-        res.send({code: 0, msg: '修改成功'})
-    })
-    .catch(() => {
-        res.send({code: -1, msg: '删除失败'})
-    })
+    let { name, price, desc, typeName, typeId, img, _id } = req.body
+    FoodModel.update({ _id }, { name, price, desc, typeName, typeId, img })
+        .then((data) => {
+            res.send({ code: 0, msg: '修改成功' })
+        })
+        .catch(() => {
+            res.send({ code: -1, msg: '删除失败' })
+        })
 })
 
 // 菜品分页
@@ -143,13 +151,13 @@ router.post('/updata', (req, res) => {
 router.get('/getInfoByPage', (req, res) => {
     let pageSize = req.query.pageSize || 5
     let page = req.query.page || 1
-    FoodModel.find().limit(Number(pageSize)).skip(Number((page -1) * pageSize))
-    .then((data) => {
-        res.send({code: 0, msg: '查询成功', count: data.length, data})
-    })
-    .catch(() => {
-        res.send({code: -1, msg: '查询失败'})
-    })
+    FoodModel.find().limit(Number(pageSize)).skip(Number((page - 1) * pageSize))
+        .then((data) => {
+            res.send({ code: 0, msg: '查询成功', count: data.length, data })
+        })
+        .catch(() => {
+            res.send({ code: -1, msg: '查询失败' })
+        })
 })
 
 module.exports = router
