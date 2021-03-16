@@ -25,6 +25,8 @@ router.post('/upload', upload.single('avatar'), (req, res) => {
     let extName = originalname.split('.')[1]
     if (!['jpg', 'png', 'gif', 'ico', 'jpeg'].includes(extName)) return res.send({ code: -1, msg: '类型错误' })
     let fileName = originalname.split('.')[0]
+        // let base64str = Buffer.from(buffer, 'binary').toString('base64'); // base64编码
+        // res.send({ code: 0, msg: '上传成功', data: 'data:image/jpg;base64,'+base64str })
     fs.writeFile(path.join(__dirname, '../static/images', `${fileName}.${extName}`), buffer, (err) => {
         if (!err) {
             let url = `/public/images/${originalname}`

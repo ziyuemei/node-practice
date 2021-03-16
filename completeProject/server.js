@@ -8,8 +8,8 @@ const path = require('path')
 const request = require('request')
 const cookieParse = require('cookie-parser')
 const session = require('express-session')
-    // const cors = require('cors')
-    // app.use(cors())
+const cors = require('cors')
+app.use(cors())
 app.use('/api', express.static(path.join(__dirname, './apidoc')))
 app.use('/public', express.static(path.join(__dirname, './static')))
 
@@ -41,6 +41,6 @@ app.get('/tengxun', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
+app.listen(3360, () => {
     console.log('服务启动成功')
 })
